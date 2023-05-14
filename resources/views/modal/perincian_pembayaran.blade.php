@@ -865,46 +865,28 @@
                                         <input class="form-control" id="inputPBB" placeholder="Masukkan PBB"></input>
                                    </div>
                                    <div class="col-4">
-                                        <label for="inputPBB" class="form-label">Total </label>
-                                        <input class="form-control" id="inputTotalPBB"></input>
+                                        <label for="inputTotalPBB" class="form-label"> Rp. </label>
+                                        <input type="text" class="form-control" id="inputTotalPBB_0" value="0"></input>
                                    </div>
+                              
                               </div>
                               <div class="col-12 mt-3">
                                    <textarea type="text" class="form-control" rows="3" id="inputKeteranganPeraturanPBB" placeholder="Masukkan Keterangan Peraturan PBB"></textarea>
                               </div>
+                              <div class="d-flex justify-content-end">
+                              
+                                   <button class="btn btn-soft-success btn-sm" id="btnUpdateRincian" onclick="updatePBB()">Update PBB</button>
+                              </div>
                          </div>
 
-                         <div class="ppn mb-3">
-                              <div class="d-flex justify-content-">
-                                   <h5 class="mb-3">PPN </h5>
-                              </div>
-                              
-                              <div class="row d-flex justify-content-between">
-                                   <div class="col-4">
-                                        <label for="inputPBB" class="form-label">Keterangan PPN : </label>
-                                        <input class="form-control" id="inputKetPPN" placeholder="Masukkan Keterangan PPN"></input>
-                                   </div>
-                                   <div class="col-4">
-                                        <label for="inputPBB" class="form-label">PPN  </label>
-                                        <input class="form-control" id="inputPPN" placeholder="Masukkan PPN"></input>
-                                   </div>
-                                   <div class="col-4">
-                                        <label for="inputPBB" class="form-label">Total </label>
-                                        <input class="form-control" id="inputTotalPPN"></input>
-                                   </div>
-                              </div>
-                              <div class="col-12 mt-3">
-                                   <textarea type="text" class="form-control" rows="3" id="inputKeteranganPPN" placeholder="Masukkan Keterangan Peraturan PPN"></textarea>
-                              </div>
-                         </div>
                          
                          <div>
                               <div class="row d-flex justify-content-between mb-2">
-                                   <div class="col-6">
+                                   <div class="col-8">
                                         <h3>Total : </h2>
                                    </div>
-                                   <div class="col-6 text-left">
-                                        <H3>Rp.<span>00.00</span></H3>
+                                   <div class="col-4 text-right">
+                                        <H3>Rp. <span id='span_total'>00.00</span></H3>
                                    </div>
                               </div>
                          </div>
@@ -962,12 +944,57 @@
 </div>
 
 <script>
+     updateTotal();
      var counter = <?php if($rp->count()>0) echo ($rp->count()-1) ; else echo 0 ?>;
 
      var pubdir = "{{asset('')}}";
      var url;
      var id_persil = "{{$pt->id_persil_tanah}}"
 
+     function updateTotal()
+     {
+          var total=0;
+          for(i=0;i<10;i++)
+          {    var v=document.getElementById(`inputNilaiTotalPPH_${i}`);
+
+               if(v===null)
+               {
+
+               }
+               else
+               {
+                    var bphtb = parseInt(document.getElementById(`inputNilaiTotalPPH_${i}`).value.replace(/\./g,''));
+                    total=total+bphtb;
+               }
+
+                v=document.getElementById(`inputTotalBPHTB_${i}`);
+
+               if(v===null)
+               {
+
+               }
+               else
+               {
+                    var ppn = parseInt(document.getElementById(`inputTotalBPHTB_${i}`).value.replace(/\./g,''));
+                    total=total+ppn;
+               }
+               
+                v=document.getElementById(`inputTotalPPN_${i}`);
+
+               if(v===null)
+               {
+
+               }
+               else
+               {
+                    var ppn = parseInt(document.getElementById(`inputTotalPPN_${i}`).value.replace(/\./g,''));
+                    total=total+ppn;
+               }
+
+
+          }
+          $("#span_total").html(toRupiah(total))
+     }
 
      function addRincianPembayaran(){
           let kjpp = document.getElementById('inputKjppRincianTransaksi').value;
@@ -1358,6 +1385,7 @@
           }
 
           document.getElementById(`inputNilaiTransaksiPPH_${index}`).value=toRupiah(nilaiTransaksiPPH);
+          updateTotal();
      }
 
 
@@ -1375,6 +1403,7 @@
           
           
           document.getElementById(`inputTotalPPN_${index}`).value=toRupiah(totalNilaiTransaksiPPN);
+          updateTotal();
      }
 
      function calculateBPHTB(index) {
@@ -1399,6 +1428,7 @@
                document.getElementById(`inputTotalBPHTB_${index}`).value = toRupiah(totalNilaiTransaksiBPHTB);
           }
           document.getElementById(`inputNilaiTransaksiBPHTB_${index}`).value=toRupiah(nilaiTransaksiBPHTB);
+          updateTotal();
      }
 
 
